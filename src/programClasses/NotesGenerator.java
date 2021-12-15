@@ -8,46 +8,61 @@ import java.util.Random;
 
 public class NotesGenerator {
     public NotesGenerator (){
+        hasAccidentals = false;
 
     }
     private String [] genNotesArray (){
         return new String[]{"Do", "Re", "Mi", "Fa", "Sol", "La", "Si"};
     }
-    private char [] genDiesisBemolle (){
+    private char [] genAccidentals(){
         Random rd = new Random();
-        char [] diesisBemolle = new char[7];
+        char [] accidentals = new char[7];
         int value;
-        for (int i = 0; i < diesisBemolle.length; i++){
+        for (int i = 0; i < accidentals.length; i++){
             value = rd.nextInt(2); //generates between 0 and 1
             if (value == 0){
-                diesisBemolle[i] = 'b';
+                accidentals[i] = 'b';
             }
             else {
-                diesisBemolle[i] = '#';
+                accidentals[i] = '#';
             }
         }
-        return diesisBemolle;
+        return accidentals;
     }
 
-    public String getRandomNotes (){
-
-        String [] notes = genNotesArray();
-        char [] diesisBemolle = genDiesisBemolle();
-
+    private void addAccidentals(String [] notes){
+        char [] accidentals = genAccidentals();
         for (int i = 0; i< notes.length; i++){
-            notes[i] += diesisBemolle[i];
+            notes[i] += accidentals[i];
         }
-        List<String> newList = new ArrayList<>(List.of(notes)) ;
-        Collections.shuffle( newList );
+    }
 
-
-        //formatting
-        String toReturn = newList.toString();
+    private String formatString (List<String> notes){
+        String toReturn = notes.toString();
         toReturn = toReturn.replace("[", "");
         toReturn = toReturn.replace("]", "");
         toReturn = toReturn.replace(",", " ");
         return toReturn;
     }
 
+    public String getRandomNotes (){
+
+        String [] notes = genNotesArray();
+        if (hasAccidentals){
+            addAccidentals(notes);
+        }
+
+        List<String> newList = new ArrayList<>(List.of(notes)) ;
+        Collections.shuffle( newList );
+
+        //formatting
+        return formatString(newList);
+    }
+
+    public void setHasAccidentals(boolean hasAccidentals) {
+        this.hasAccidentals = hasAccidentals;
+    }
+
+    private boolean hasAccidentals;
 
 }

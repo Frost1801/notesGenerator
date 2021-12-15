@@ -14,9 +14,11 @@ public class GUI implements ActionListener {
 
     JFrame frame;
     JButton generate;
+    JCheckBox wantAccidentals;
     JLabel notes;
 
     JPanel panel;
+    JPanel buttonsPanel;
     public GUI() {
         frame = new JFrame();
 
@@ -31,7 +33,7 @@ public class GUI implements ActionListener {
 
 
 
-        frame.setSize(300,150);
+        frame.setSize(300,175);
         frame.setLayout(new BorderLayout());
         frame.getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, new Color(30, 36, 91)));
         frame.setResizable(false);
@@ -44,11 +46,27 @@ public class GUI implements ActionListener {
         generate.setFocusable(false);
         generate.setBackground(new Color(12, 134, 243));
 
+        wantAccidentals = new JCheckBox("<html>Include accidentals<html>");
+        wantAccidentals.setFont(new Font("Garuda",Font.BOLD,16));
+        wantAccidentals.setForeground(Color.black);
+        wantAccidentals.addActionListener(this);
+        wantAccidentals.setFocusable(false);
+        wantAccidentals.setHorizontalAlignment(JButton.CENTER);
+
 
 
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.add(generate, BorderLayout.SOUTH);
+
+        buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel,BoxLayout.Y_AXIS));
+        buttonsPanel.add(wantAccidentals);
+        buttonsPanel.add(generate);
+
+
+
+
+        panel.add(buttonsPanel, BorderLayout.SOUTH);
         panel.add(notes, BorderLayout.CENTER);
 
 
@@ -62,8 +80,12 @@ public class GUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == generate){
             NotesGenerator gn = new NotesGenerator();
+            if (wantAccidentals.isSelected()){
+                gn.setHasAccidentals(true);
+            }
             String notesArray = gn.getRandomNotes();
             notes.setForeground(new Color(0, 0, 0, 255));
 
